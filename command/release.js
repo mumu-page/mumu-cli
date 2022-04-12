@@ -48,7 +48,7 @@ async function release() {
 
   // 发布
   const baseApi = releaseAPIMap[mode];
-  const templateConfig = require(`${process.cwd()}/coco.config.js`);
+  const templateConfig = require(`${process.cwd()}/mumu.config.js`);
   // 升级版本
   const spinner = ora('🗃 开始提交模板...').start();
   await upVersion();

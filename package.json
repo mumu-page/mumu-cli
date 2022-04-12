@@ -1,10 +1,10 @@
 {
-  "name": "coco-h5-cli",
+  "name": "mumu-page-cli",
   "version": "1.0.0",
-  "description": "coco cli",
+  "description": "mumu cli",
   "private": false,
   "bin": {
-    "coco": "./bin/index.js"
+    "mumu": "./bin/index.js"
   },
   "files": [
     "bin",
@@ -15,7 +15,7 @@
   "main": "index.js",
   "keywords": [
     "cli",
-    "coco-h5"
+    "mumu-page"
   ],
   "author": "muwoo",
   "license": "ISC",

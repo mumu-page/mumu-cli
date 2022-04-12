@@ -11,19 +11,19 @@ const pkg = require('../package.json')
 
 let config = {};
 // 配置文件如果存在则读取
-if(fs.existsSync(path.resolve('coco.config.js'))){
-  config = require(path.resolve('coco.config.js'));
+if(fs.existsSync(path.resolve('mumu.config.js'))){
+  config = require(path.resolve('mumu.config.js'));
 }
 
 program
   .version(pkg.version,'-v, --version')
   .command('init')
-  .description('初始化 coco config 配置文件')
+  .description('初始化 mumu config 配置文件')
   .action(initial);
 
 program
   .command('create [template]')
-  .description('生成 coco 模板')
+  .description('生成 mumu 模板')
   .action(function(template){
     generate(template);
   });

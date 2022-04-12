@@ -1,8 +1,8 @@
 module.exports = {
-  name: 'coco-template',
+  name: 'mumu-template',
   templateName: '营销活动',
   author: 'muwoo',
   snapshot: 'https://cdn.img.snapshot.png',
-  gitUrl: 'git@gitlab.yourgitlab.com:coco/coco-template.git',
+  gitUrl: 'https://github.com/mumu-page/mumu-template.git',
   projectType: '0'
 };
