@@ -10,11 +10,11 @@ $ npm link
 然后在对应的模板库或者组件库中使用软连接
 
 ```shell
-$ npm link mumu-h5-cli
+$ npm link mumu-page-cli
 ```
 
 ## npm 安装
 在对应的模板库或者组件库中安装
 ```shell
-$ npm i mumu-h5-cli --save-dev
+$ npm i mumu-page-cli --save-dev
 ```
