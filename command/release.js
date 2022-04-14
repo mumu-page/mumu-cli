@@ -1,44 +1,12 @@
+const releaseAPIMap = require('../api/config');
 const { execSync } = require('child_process');
 const process = require('process');
-const inquirer = require('inquirer');
 const axios = require('axios');
 const chalk = require('chalk');
 const ora = require('ora');
-const { writeFileTree, resolveJson, pusBranch } = require('../lib/utils');
+const { writeFileTree, resolveJson, pusBranch, selectEnv } = require('../lib/utils');
 
 const rootPath = process.cwd();
-
-const releaseAPIMap = {
-  test: 'http://localhost:7001',
-  preview: 'http://localhost:7001',
-  production: 'https://api.resonance.fun:8080',
-}
-
-const platformQues = [
-  {
-    type: 'list',
-    name: 'env',
-    message: '请选择打包环境',
-    default: 'test',
-    choices: [
-      {
-        key: 'test',
-        name: `测试(TEST) - ${releaseAPIMap.test}`,
-        value: 'test',
-      },
-      {
-        key: 'preview',
-        name: `预发(PRE) - ${releaseAPIMap.preview}`,
-        value: 'preview',
-      },
-      {
-        key: 'production',
-        name: `生产(PRO) - ${releaseAPIMap.production}`,
-        value: 'production',
-      },
-    ]
-  }
-];
 
 async function upVersion() {
   const pkg = resolveJson(rootPath);
@@ -56,11 +24,8 @@ async function upVersion() {
 
 async function release() {
   // 构建
-  const res = await inquirer.prompt(platformQues);
-  const { env } = res;
-  const mode = env;
+  const mode = await selectEnv();
   execSync(`npx vue-cli-service build ${mode ? `--mode ${mode}` : ''}`, { stdio: 'inherit' });
-
   // 发布
   const baseApi = releaseAPIMap[mode];
   const templateConfig = require(`${process.cwd()}/mumu.config.js`);

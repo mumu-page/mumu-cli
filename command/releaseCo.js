@@ -1,7 +1,7 @@
-const { Shell, resolveJson } = require('../lib/utils');
+const { Shell, resolveJson, selectEnv } = require('../lib/utils');
 const process = require('process');
 const ora = require('ora');
-
+const releaseAPIMap = require('../api/config')
 const rootPath = process.cwd();
 const axios = require('axios');
 
@@ -59,8 +59,9 @@ async function releaseComponents({ webDomian, nameSpace, gitUrl, name, baseApi }
 }
 
 async function releaseCo() {
-  const baseApi = 'http://localhost:7001';
-  await releaseComponents({baseApi});
+  const mode = await selectEnv();
+  const baseApi = releaseAPIMap[mode];
+  await releaseComponents({baseApi: baseApi});
 }
 
 module.exports = releaseCo;
