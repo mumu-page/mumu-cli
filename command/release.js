@@ -8,21 +8,37 @@ const { writeFileTree, resolveJson, pusBranch } = require('../lib/utils');
 
 const rootPath = process.cwd();
 
+const releaseAPIMap = {
+  test: 'http://localhost:7001',
+  preview: 'http://localhost:7001',
+  production: 'https://api.resonance.fun:8080',
+}
+
 const platformQues = [
   {
     type: 'list',
     name: 'env',
     message: '请选择打包环境',
-    default: '',
-    choices: ['测试 qa', '预发 pre', '生产 production']
+    default: 'test',
+    choices: [
+      {
+        key: 'test',
+        name: `测试(TEST) - ${releaseAPIMap.test}`,
+        value: 'test',
+      },
+      {
+        key: 'preview',
+        name: `预发(PRE) - ${releaseAPIMap.preview}`,
+        value: 'preview',
+      },
+      {
+        key: 'production',
+        name: `生产(PRO) - ${releaseAPIMap.production}`,
+        value: 'production',
+      },
+    ]
   }
 ];
-
-const releaseAPIMap = {
-  qa: 'http://localhost:7001',
-  pre: 'http://localhost:7001',
-  production: 'http://localhost:7001',
-}
 
 async function upVersion() {
   const pkg = resolveJson(rootPath);
@@ -38,12 +54,11 @@ async function upVersion() {
   });
 }
 
-
 async function release() {
   // 构建
   const res = await inquirer.prompt(platformQues);
   const { env } = res;
-  const mode = env.split(' ')[1];
+  const mode = env;
   execSync(`npx vue-cli-service build ${mode ? `--mode ${mode}` : ''}`, { stdio: 'inherit' });
 
   // 发布
@@ -54,7 +69,7 @@ async function release() {
   await upVersion();
   pusBranch();
   spinner.succeed('🎉 模版提交完成');
-  await releaseTemplate({...templateConfig, baseApi});
+  await releaseTemplate({ ...templateConfig, baseApi });
 }
 
 async function releaseTemplate({
