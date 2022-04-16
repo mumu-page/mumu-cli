@@ -28,6 +28,9 @@ async function releaseComponents({ webDomian, nameSpace, gitUrl, name, baseApi }
         dir: file,
         snapshot: json.snapshot,
         name,
+        schema: json.schema,
+        data: json.data,
+        type: 'global-component',
         description: json.description,
         js: `${componentConfig.webDomian}/${json.name}/${name}.umd.js`,
         css: `${componentConfig.webDomian}/${json.name}/${name}.css`
