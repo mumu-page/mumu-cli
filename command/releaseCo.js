@@ -22,13 +22,14 @@ async function releaseComponents({ webDomian, nameSpace, gitUrl, name, baseApi }
         console.error(`${rootPath}/packages/${file} 存在不合规范的package.json, 必须包含name、version、description属性`);
         process.exit(0);
       }
-      // 组件发布按照 组件名+组件版本 的形式进行发布，比如 mumu-global-banner.0.0.1.umd.js
-      const name = `${json.name}.${json.version}`;
+      // 组件发布按照 组件名+组件版本 的形式进行发布，比如 mumu-global-banner_0.0.1.umd.js
+      const name = `${json.name}_${json.version}`;
       config.config.push({
         dir: file,
         snapshot: json.snapshot,
         name,
-        schema: json.schema,
+        // 以下属性在对应组件包中获取
+        // schema: json.schema,
         data: json.data,
         type: 'global-component',
         description: json.description,
