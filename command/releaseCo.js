@@ -5,7 +5,7 @@ const releaseAPIMap = require('../api/config')
 const rootPath = process.cwd();
 const axios = require('axios');
 
-async function releaseComponents({ webDomian, nameSpace, gitUrl, name, baseApi }) {
+async function releaseComponents ({ webDomian, nameSpace, gitUrl, name, baseApi }) {
   const spinner = ora('🗃 开始上传组件...').start();
 
   const sh = new Shell();
@@ -33,17 +33,17 @@ async function releaseComponents({ webDomian, nameSpace, gitUrl, name, baseApi }
         data: json.data,
         type: 'global-component',
         description: json.description,
-        js: `${componentConfig.webDomian}/${json.name}/${name}.umd.js`,
-        css: `${componentConfig.webDomian}/${json.name}/${name}.css`
+        js: `${componentConfig.webDomian}/umd/${json.name}/${name}.js`,
+        css: `${componentConfig.webDomian}/umd/${json.name}/${name}.css`
       });
     }
   });
   try {
-    const res = await axios.get(`${baseApi}/component/query`, {
-      params: { gitUrl }
+    const res = await axios.get(`${baseApi}/component/findOne`, {
+      params: { gitUrl: gitUrl ? gitUrl : componentConfig.gitUrl }
     });
     config.config = JSON.stringify(config.config);
-    const hasRecord = !!res.data.result[0];
+    const hasRecord = !!res.data.data?.[0];
     if (!hasRecord) {
       const res = await axios.post(`${baseApi}/component/add`, config);
       if (res.data.showType !== undefined) {
@@ -57,15 +57,15 @@ async function releaseComponents({ webDomian, nameSpace, gitUrl, name, baseApi }
     }
     spinner.succeed('🎉 组件上传完成');
   } catch (e) {
-    process.exit(0);
     console.log('上传失败' + e);
+    process.exit(0);
   }
 }
 
-async function releaseCo() {
+async function releaseCo () {
   const mode = await selectEnv();
   const baseApi = releaseAPIMap[mode];
-  await releaseComponents({baseApi: baseApi});
+  await releaseComponents({ baseApi: baseApi });
 }
 
 module.exports = releaseCo;

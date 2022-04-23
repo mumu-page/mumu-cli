@@ -8,7 +8,7 @@ const { writeFileTree, resolveJson, pusBranch, selectEnv } = require('../lib/uti
 
 const rootPath = process.cwd();
 
-async function upVersion() {
+async function upVersion () {
   const pkg = resolveJson(rootPath);
   // master 版本号自增
   const v = pkg.version.split('.');
@@ -22,10 +22,11 @@ async function upVersion() {
   });
 }
 
-async function release() {
+async function release () {
   // 构建
   const mode = await selectEnv();
-  execSync(`npx vue-cli-service build ${mode ? `--mode ${mode}` : ''}`, { stdio: 'inherit' });
+  // execSync(`npx vue-cli-service build ${mode ? `--mode ${mode}` : ''}`, { stdio: 'inherit' });
+  execSync(`npm run build ${mode ? `-- -- --mode ${mode}` : ''}`, { stdio: 'inherit' });
   // 发布
   const baseApi = releaseAPIMap[mode];
   const templateConfig = require(`${process.cwd()}/mumu.config.js`);
@@ -37,7 +38,7 @@ async function release() {
   await releaseTemplate({ ...templateConfig, baseApi });
 }
 
-async function releaseTemplate({
+async function releaseTemplate ({
   snapshot,
   name,
   templateName,
@@ -60,7 +61,5 @@ async function releaseTemplate({
     console.log(error);
   }
 }
-
-
 
 module.exports = release;
