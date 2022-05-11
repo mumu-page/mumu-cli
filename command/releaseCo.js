@@ -27,9 +27,9 @@ async function releaseComponents ({ webDomian, nameSpace, gitUrl, name, baseApi 
       config.config.push({
         dir: file,
         snapshot: json.snapshot,
-        name,
+        name: `${json.name}_v${json.version.replace(/\./g, '_')}`,
         // 以下属性在对应组件包中获取
-        // schema: json.schema,
+        schema: json.schema,
         data: json.data,
         type: 'global-component',
         description: json.description,
