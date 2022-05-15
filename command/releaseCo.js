@@ -5,7 +5,7 @@ const releaseAPIMap = require('../api/config')
 const rootPath = process.cwd();
 const axios = require('axios');
 
-async function releaseComponents ({ webDomian, nameSpace, gitUrl, name, baseApi }) {
+async function releaseComponents ({ webDomain, nameSpace, gitUrl, name, baseApi }) {
   const spinner = ora('🗃 开始上传组件...').start();
 
   const sh = new Shell();
@@ -15,26 +15,26 @@ async function releaseComponents ({ webDomian, nameSpace, gitUrl, name, baseApi 
     config: []
   };
   // 查找 packages 下所有文件
-  sh.shell.ls('packages').forEach((file) => {
+  sh.shell.ls('src/packages').forEach((file) => {
     if (file.indexOf('.') === -1) {
-      const json = resolveJson(`${rootPath}/packages/${file}`);
+      const json = resolveJson(`${rootPath}/src/packages/${file}`);
       if (!json.name || !json.version || !json.description) {
         console.error(`${rootPath}/packages/${file} 存在不合规范的package.json, 必须包含name、version、description属性`);
         process.exit(0);
       }
       // 组件发布按照 组件名+组件版本 的形式进行发布，比如 mumu-global-banner_0.0.1.umd.js
-      const name = `${json.name}_${json.version}`;
+      const name = `${json.name}_v${json.version}`;
       config.config.push({
         dir: file,
         snapshot: json.snapshot,
         name: `${json.name}_v${json.version.replace(/\./g, '_')}`,
         // 以下属性在对应组件包中获取
         schema: json.schema,
-        data: json.data,
+        props: json.data,
         type: 'global-component',
         description: json.description,
-        js: `${componentConfig.webDomian}/umd/${json.name}/${name}.js`,
-        css: `${componentConfig.webDomian}/umd/${json.name}/${name}.css`
+        js: `${componentConfig.webDomain}/umd/${json.name}/${name}.js`,
+        css: `${componentConfig.webDomain}/umd/${json.name}/${name}.css`
       });
     }
   });
